@@ -15,7 +15,7 @@ public class DataStructure
 
         public bool IsEmpty()
         {
-            return this._head == null && this._tail == null;
+            return this._head == null || this._tail == null;
         
         }
 
@@ -50,7 +50,7 @@ public class DataStructure
         {
             if (this.IsEmpty())
             {
-                throw new ArgumentOutOfRangeException("La liste est vide");
+                throw new ArgumentOutOfRangeException("REMOVE AT FIRST : La liste est vide");
             }
             Node<T> nodeToRemove = this._head;
             if (this._head.Next == null)
@@ -63,6 +63,22 @@ public class DataStructure
                 this._head = this._head.Next;
             }
             return nodeToRemove;
+        }
+
+        public void ShowList()
+        {
+            if (this.IsEmpty())
+            {
+                Console.WriteLine("SHOW LIST : La liste est vide");
+                return;
+            }
+            Node<T> pointer = this._head;
+            while(pointer != null)
+            {
+                Console.Write($"{pointer.Value}" + (pointer.Next == null ? "" : " -> "));
+                pointer = pointer.Next;
+            }
+            Console.WriteLine();
         }
 
     }
@@ -126,11 +142,5 @@ public class DataStructure
         {
             return this.LinkedListStack.RemoveAtFirst();
         }
-    }
-
-    public static void Main(string[] args)
-    {
-        Node<int> n1 = new Node<int>(1, null);
-        Console.WriteLine(n1.Value);
     }
 }

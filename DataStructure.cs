@@ -6,16 +6,18 @@ public class DataStructure
     {
         private Node<T>? _head;
         private Node<T>? _tail;
+        private int _count;
 
         public LinkedList()
         {
             this._head = null;
             this._tail = null;
+            this._count = 0;
         }
 
         public bool IsEmpty()
         {
-            return this._head == null || this._tail == null;
+            return this._count == 0;
         
         }
 
@@ -30,6 +32,7 @@ public class DataStructure
             {
                 this._head = new Node<T>(value, this._head);
             }
+            this._count++;
         }
 
         public void InsertAtLast(T value)
@@ -44,6 +47,7 @@ public class DataStructure
                 this._tail.Next = newNode;
                 this._tail = newNode;
             }
+            this._count++;
         }
 
         public Node<T> RemoveAtFirst()
@@ -62,6 +66,7 @@ public class DataStructure
             {
                 this._head = this._head.Next;
             }
+            this._count--;
             return nodeToRemove;
         }
 

@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Collections.Generic;
 
 public class DataStructure
 {
@@ -6,18 +7,18 @@ public class DataStructure
     {
         private Node<T>? _head;
         private Node<T>? _tail;
-        private int _count;
+        private int Count;
 
         public LinkedList()
         {
             this._head = null;
             this._tail = null;
-            this._count = 0;
+            this.Count = 0;
         }
 
         public bool IsEmpty()
         {
-            return this._count == 0;
+            return this.Count == 0;
         
         }
 
@@ -32,7 +33,7 @@ public class DataStructure
             {
                 this._head = new Node<T>(value, this._head);
             }
-            this._count++;
+            this.Count++;
         }
 
         public void InsertAtLast(T value)
@@ -47,7 +48,7 @@ public class DataStructure
                 this._tail.Next = newNode;
                 this._tail = newNode;
             }
-            this._count++;
+            this.Count++;
         }
 
         public Node<T> RemoveAtFirst()
@@ -66,7 +67,7 @@ public class DataStructure
             {
                 this._head = this._head.Next;
             }
-            this._count--;
+            this.Count--;
             return nodeToRemove;
         }
 
@@ -84,6 +85,34 @@ public class DataStructure
                 pointer = pointer.Next;
             }
             Console.WriteLine();
+        }
+
+        public List<T> ToList()
+        {
+            if (this.IsEmpty())
+            {
+                throw new Exception("ToList : La liste est vide");
+            }
+            List<T> result = new List<T>(this.Count);
+            Node<T> pointer = this._head;
+            for(int i = 0; i < this.Count; i++)
+            {
+                result.Add(pointer.Value);
+                pointer = pointer.Next;
+            }
+            return result;
+        }
+
+        public void Clear()
+        {
+            if (this.IsEmpty())
+            {
+                Console.WriteLine("La liste est déjà vide");
+                return;
+            }
+            this._head = null;
+            this._tail = null;
+            this.Count = 0;
         }
 
     }
@@ -123,6 +152,16 @@ public class DataStructure
             return this.LinkedListQueue.RemoveAtFirst();
         }
 
+        public List<T> ToList()
+        {
+            return this.LinkedListQueue.ToList();
+        }
+
+        public void Clear()
+        {
+            this.LinkedListQueue.Clear();
+        }
+
     }
 
     public class Stack<T>
@@ -146,6 +185,16 @@ public class DataStructure
         public Node<T> Pop()
         {
             return this.LinkedListStack.RemoveAtFirst();
+        }
+
+        public List<T> ToList()
+        {
+            return this.LinkedListStack.ToList();
+        }
+
+        public void Clear()
+        {
+            this.LinkedListStack.Clear();
         }
     }
 }

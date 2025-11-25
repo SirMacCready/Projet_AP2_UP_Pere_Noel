@@ -454,7 +454,7 @@ namespace AuPaysDuPereNoel
 
         public void AvancerUneHeure()
         {
-            
+        }
 
         public bool ToutesLettresTraitees()
         {
@@ -495,11 +495,11 @@ namespace AuPaysDuPereNoel
 
         public void AvancerJusquaJourSuivant()
         {
-           
+        }
 
         public void ModifierNombreLutins(int nouveauNombre)
         {
-          
+        }
 
         public void ModifierNombreNains(int nouveauNombre)
         {

@@ -429,7 +429,7 @@ namespace AuPaysDuPereNoel
 
             for (int i = 0; i < NbEnfants; i++)
             {
-                string nom = prenoms[random.Next(prenoms.Length)] + i;
+                string nom = prenoms[random.Next(prenoms.Length)] + i; //* TODO Ajouter un ID pour éviter les doublons 
                 string adresse = villes[random.Next(villes.Length)];
                 Continent continent = (Continent)random.Next(5);
                 int age = random.Next(0, 19);
@@ -454,6 +454,130 @@ namespace AuPaysDuPereNoel
 
         public void AvancerUneHeure()
         {
+            // JE FAIS UN EFFORT POUR COMMENTER CHAQUE ÉTAPE CLAIREMENT CLOE !
+            // Arrivée de nouvelles lettres sur le bureau du Père Noël (au début de l'heure)
+            int maxArrivees = Math.Min(NbLettresParHeure, BureauPereNoel.Count);
+            int nbArrivees = random.Next(maxArrivees + 1); // entre 0 et maxArrivees
+            for (int i = 0; i < nbArrivees; i++)
+            {
+                FileAttenteFabrication.Enqueue(BureauPereNoel.Pop());
+            }
+
+            // Assigner des lettres aux lutins libres
+            foreach (Lutin lutin in Lutins)
+            {
+                if (lutin.Statut == StatutEmploye.EnAttente && FileAttenteFabrication.Count > 0)
+                {
+                    Lettre lettre = FileAttenteFabrication.Dequeue();
+                    lutin.CommencerFabrication(lettre);
+                }
+            }
+
+            // Les lutins travaillent -> certaines lettres sont terminées
+            List<Lettre> fabriques = new List<Lettre>();
+            foreach (Lutin lutin in Lutins)
+            {
+                Lettre termine = lutin.Travailler();
+                if (termine != null)
+                {
+                    fabriques.Add(termine);
+                }
+            }
+
+            // Les jouets fabriqués vont soit aux nains (si dispo) soit en file d'attente emballage
+            foreach (Lettre l in fabriques)
+            {
+                FileAttenteEmballage.Enqueue(l);
+            }
+
+            // Assigner des emballages aux nains libres
+            foreach (Nain nain in Nains)
+            {
+                if (nain.Statut == StatutEmploye.EnAttente && FileAttenteEmballage.Count > 0)
+                {
+                    Lettre lettre = FileAttenteEmballage.Dequeue();
+                    nain.CommencerEmballage(lettre);
+                }
+            }
+
+            // Les nains travaillent -> certaines lettres sont emballées
+            List<Lettre> emballes = new List<Lettre>();
+            foreach (Nain nain in Nains)
+            {
+                Lettre termine = nain.Travailler();
+                if (termine != null)
+                {
+                    emballes.Add(termine);
+                }
+            }
+
+            // Les lettres emballées sont placées dans la file du continent correspondant
+            foreach (Lettre l in emballes)
+            {
+                FilesAttenteContinents[(int)l.Continent].Enqueue(l);
+            }
+
+            // Les elfes reçoivent les lettres depuis les files continentales si possible
+            foreach (Elfe elfe in Elfes)
+            {
+                Queue<Lettre> file = FilesAttenteContinents[(int)elfe.Continent];
+                while (file.Count > 0 && elfe.Traineau.PeutCharger())
+                {
+                    Lettre lettre = file.Dequeue();
+                    elfe.RecevoirLettre(lettre);
+                }
+            }
+
+            // Avancer les voyages des traîneaux et récupérer les livraisons
+            for (int i = 0; i < Elfes.Count; i++)
+            {
+                Elfe elfe = Elfes[i];
+                List<Lettre> livrees = elfe.Traineau.AvancerVoyage();
+                if (livrees != null && livrees.Count > 0)
+                {
+                    Entrepots[(int)elfe.Continent].AjouterLettres(livrees);
+                }
+            }
+
+            // Calcul des coûts pour cette heure
+            double coutHeure = 0;
+
+            // Lutins: 1.5 pièce/h s'ils travaillent, 1 pièce/h s'ils sont en attente, 0 s'ils sont en repos
+            foreach (Lutin lutin in Lutins)
+            {
+                if (lutin.Statut == StatutEmploye.EnTravail) coutHeure += 1.5;
+                else if (lutin.Statut == StatutEmploye.EnAttente) coutHeure += 1.0;
+            }
+
+            // Nains: 1 pièce/h s'ils travaillent, 0.5 s'ils sont en attente
+            foreach (Nain nain in Nains)
+            {
+                if (nain.Statut == StatutEmploye.EnTravail) coutHeure += 1.0;
+                else if (nain.Statut == StatutEmploye.EnAttente) coutHeure += 0.5;
+            }
+
+            // Elfes: 2 pièces/h en voyage, 1.5 pièces/h si en chargement/présence de colis
+            foreach (Elfe elfe in Elfes)
+            {
+                if (elfe.Traineau.EnVoyage) coutHeure += 2.0;
+                else
+                {
+                    // Si l'elfe a chargé quelque chose (lettres sur le traîneau) ou s'il reste des lettres à charger -> coût de chargement
+                    if (elfe.Traineau.Lettres.Count > 0 || FilesAttenteContinents[(int)elfe.Continent].Count > 0)
+                        coutHeure += 1.5;
+                }
+            }
+
+            CoutTotal += coutHeure;
+            CoutsParHeure.Add(coutHeure);
+
+            // Avancer le temps
+            HeureActuelle++;
+            if (HeureActuelle % 12 == 0)
+            {
+                // fin de journée de travail, on passe au jour suivant
+                JourActuel++;
+            }
         }
 
         public bool ToutesLettresTraitees()
@@ -495,15 +619,100 @@ namespace AuPaysDuPereNoel
 
         public void AvancerJusquaJourSuivant()
         {
+            int heuresPassees = 0;
+            int reste = 12 - (HeureActuelle % 12);
+            if (reste == 0) reste = 12; // si on est exactement au début d'une journée, avancer d'une journée complète
+            for (int i = 0; i < reste; i++)
+            {
+                AvancerUneHeure();
+                heuresPassees++;
+            }
         }
 
         public void ModifierNombreLutins(int nouveauNombre)
         {
+            // Nouveau nombre d'actifs (pas le total) - respect cooldown de 12 heures
+            if (HeureActuelle - DerniereModificationLutins < 12)
+            {
+                Console.WriteLine("Modification impossible: délai de 12 heures non respecté.");
+                return;
+            }
+
+            if (nouveauNombre < 0 || nouveauNombre > NbLutins)
+            {
+                Console.WriteLine("Nombre invalide (doit être entre 0 et le nombre total de lutins).");
+                return;
+            }
+
+            int actifs = Lutins.Count(l => l.Statut != StatutEmploye.EnRepos);
+
+            if (nouveauNombre > actifs)
+            {
+                // Réveiller des lutins en repos si possible
+                int aAjouter = nouveauNombre - actifs;
+                foreach (Lutin l in Lutins.Where(x => x.Statut == StatutEmploye.EnRepos))
+                {
+                    l.Statut = StatutEmploye.EnAttente;
+                    aAjouter--;
+                    if (aAjouter == 0) break;
+                }
+            }
+            else if (nouveauNombre < actifs)
+            {
+                // Mettre certains lutins au repos (préférer ceux en attente)
+                int aMettreRepos = actifs - nouveauNombre;
+                foreach (Lutin l in Lutins.Where(x => x.Statut == StatutEmploye.EnAttente))
+                {
+                    l.Statut = StatutEmploye.EnRepos;
+                    aMettreRepos--;
+                    if (aMettreRepos == 0) break;
+                }
+
+                // Si besoin, mettre aussi des lutins en travail au repos uniquement si nécessaire (on ne coupe pas un travail en cours)
+            }
+
+            DerniereModificationLutins = HeureActuelle;
         }
 
         public void ModifierNombreNains(int nouveauNombre)
         {
-           
+            // Nouveau nombre d'actifs (pas le total) - respect cooldown de 24 heures
+            if (HeureActuelle - DerniereModificationNains < 24)
+            {
+                Console.WriteLine("Modification impossible: délai de 24 heures non respecté.");
+                return;
+            }
+
+            if (nouveauNombre < 0 || nouveauNombre > NbNains)
+            {
+                Console.WriteLine("Nombre invalide (doit être entre 0 et le nombre total de nains).");
+                return;
+            }
+
+            int actifs = Nains.Count(n => n.Statut != StatutEmploye.EnRepos);
+
+            if (nouveauNombre > actifs)
+            {
+                int aAjouter = nouveauNombre - actifs;
+                foreach (Nain n in Nains.Where(x => x.Statut == StatutEmploye.EnRepos))
+                {
+                    n.Statut = StatutEmploye.EnAttente;
+                    aAjouter--;
+                    if (aAjouter == 0) break;
+                }
+            }
+            else if (nouveauNombre < actifs)
+            {
+                int aMettreRepos = actifs - nouveauNombre;
+                foreach (Nain n in Nains.Where(x => x.Statut == StatutEmploye.EnAttente))
+                {
+                    n.Statut = StatutEmploye.EnRepos;
+                    aMettreRepos--;
+                    if (aMettreRepos == 0) break;
+                }
+            }
+
+            DerniereModificationNains = HeureActuelle;
         }
 
         public void AfficherIndicateurs()

@@ -1,5 +1,6 @@
 // ============= CLASSE TRAINEAU =============
-
+namespace BigDaddySanta
+{
     public class Traineau
     {
         public Continent Continent { get; set; }
@@ -17,12 +18,12 @@
             HeuresVoyageRestantes = 0;
         }
 
-        public bool PeutCharger() 
+        public bool PeutCharger()
         {
             return !EnVoyage && Lettres.Count < CapaciteMax;
         }
 
-        public void ChargerLettre(Lettre lettre)   
+        public void ChargerLettre(Lettre lettre)
         {
             if (lettre == null) return;
             if (PeutCharger())
@@ -31,12 +32,12 @@
             }
         }
 
-        public bool EstPlein()  
+        public bool EstPlein()
         {
             return Lettres.Count >= CapaciteMax;
         }
 
-        public void PartirEnVoyage()    
+        public void PartirEnVoyage()
         {
             if (Lettres.Count > 0 && !EnVoyage)
             {
@@ -53,7 +54,7 @@
 
             if (HeuresVoyageRestantes <= 0)
             {
-                List<Lettre> lettresLivrees = Lettres.ToList(); 
+                List<Lettre> lettresLivrees = Lettres.ToList();
                 Lettres.Clear();
                 EnVoyage = false;
                 return lettresLivrees;
@@ -62,3 +63,4 @@
             return null;
         }
     }
+}

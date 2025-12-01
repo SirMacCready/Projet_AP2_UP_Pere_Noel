@@ -1,6 +1,8 @@
 
-    // ============= CLASSE ENTREPOT =============
+// ============= CLASSE ENTREPOT =============
 
+namespace BigDaddySanta
+{
     public class Entrepot
     {
         public Continent Continent { get; set; }
@@ -26,9 +28,10 @@
 
             foreach (Lettre lettre in Lettres)
             {
-                stats[(int)lettre.TypeCadeau]++;
+                stats[(int)lettre.Cadeau]++;
             }
 
             return stats;
         }
     }
+}

@@ -1,11 +1,16 @@
-public class Lutin
+// ============= CLASSE NAIN =============
+
+namespace BigDaddySanta
+{
+    public class Nain
     {
         public int Id { get; set; }
         public StatutEmploye Statut { get; set; }
         public Lettre LettreEnCours { get; set; }
         public int HeuresRestantes { get; set; }
 
-        public Lutin(int id)
+
+        public Nain(int id)
         {
             Id = id;
             Statut = StatutEmploye.EnAttente;
@@ -13,11 +18,11 @@ public class Lutin
             HeuresRestantes = 0;
         }
 
-        public void CommencerFabrication(Lettre lettre)
+        public void CommencerEmballage(Lettre lettre)
         {
             if (lettre == null) return;
             LettreEnCours = lettre;
-            HeuresRestantes = lettre.DureeFabrication;
+            HeuresRestantes = 2;
             Statut = StatutEmploye.EnTravail;
         }
 
@@ -39,4 +44,4 @@ public class Lutin
             return null;
         }
     }
-
+}

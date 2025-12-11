@@ -330,20 +330,41 @@ public void ModifierNombreLutins(int nouveauNombre)
         return;
     }
 
-    // Activer ou désactiver lutins selon nouveauNombre
-    int actifs = Lutins.Count(l => l.Statut != StatutEmploye.EnRepos);
+    // Calcul du nombre de lutins actifs (pas en repos)
+    int actifs = 0;
+    foreach (Lutin l in Lutins)
+    {
+        if (l.Statut != StatutEmploye.EnRepos)
+            actifs++;
+    }
 
     if (nouveauNombre > actifs)
     {
-        var lutinsRepos = Lutins.Where(l => l.Statut == StatutEmploye.EnRepos).Take(nouveauNombre - actifs);
-        foreach (var lutin in lutinsRepos)
-            lutin.Statut = StatutEmploye.EnAttente;
+        int aActiver = nouveauNombre - actifs;
+        foreach (Lutin l in Lutins)
+        {
+            if (aActiver <= 0)
+                break;
+            if (l.Statut == StatutEmploye.EnRepos)
+            {
+                l.Statut = StatutEmploye.EnAttente;
+                aActiver--;
+            }
+        }
     }
     else if (nouveauNombre < actifs)
     {
-        var lutinsActifs = Lutins.Where(l => l.Statut != StatutEmploye.EnRepos).Take(actifs - nouveauNombre);
-        foreach (var lutin in lutinsActifs)
-            lutin.Statut = StatutEmploye.EnRepos;
+        int aMettreRepos = actifs - nouveauNombre;
+        foreach (Lutin l in Lutins)
+        {
+            if (aMettreRepos <= 0)
+                break;
+            if (l.Statut != StatutEmploye.EnRepos)
+            {
+                l.Statut = StatutEmploye.EnRepos;
+                aMettreRepos--;
+            }
+        }
     }
 
     DerniereModificationLutins = HeureActuelle;
@@ -360,19 +381,41 @@ public void ModifierNombreNains(int nouveauNombre)
         return;
     }
 
-    int actifs = Nains.Count(n => n.Statut != StatutEmploye.EnRepos);
+    // Calcul du nombre de nains actifs (pas en repos)
+    int actifs = 0;
+    foreach (Nain n in Nains)
+    {
+        if (n.Statut != StatutEmploye.EnRepos)
+            actifs++;
+    }
 
     if (nouveauNombre > actifs)
     {
-        var nainsRepos = Nains.Where(n => n.Statut == StatutEmploye.EnRepos).Take(nouveauNombre - actifs);
-        foreach (var nain in nainsRepos)
-            nain.Statut = StatutEmploye.EnAttente;
+        int aActiver = nouveauNombre - actifs;
+        foreach (Nain n in Nains)
+        {
+            if (aActiver <= 0)
+                break;
+            if (n.Statut == StatutEmploye.EnRepos)
+            {
+                n.Statut = StatutEmploye.EnAttente;
+                aActiver--;
+            }
+        }
     }
     else if (nouveauNombre < actifs)
     {
-        var nainsActifs = Nains.Where(n => n.Statut != StatutEmploye.EnRepos).Take(actifs - nouveauNombre);
-        foreach (var nain in nainsActifs)
-            nain.Statut = StatutEmploye.EnRepos;
+        int aMettreRepos = actifs - nouveauNombre;
+        foreach (Nain n in Nains)
+        {
+            if (aMettreRepos <= 0)
+                break;
+            if (n.Statut != StatutEmploye.EnRepos)
+            {
+                n.Statut = StatutEmploye.EnRepos;
+                aMettreRepos--;
+            }
+        }
     }
 
     DerniereModificationNains = HeureActuelle;

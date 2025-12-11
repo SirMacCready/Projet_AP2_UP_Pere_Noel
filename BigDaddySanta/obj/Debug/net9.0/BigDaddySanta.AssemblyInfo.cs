@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BigDaddySanta")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3975c8766f0a6ca513ceee48710f28e3776bd0d0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4e82bc325bc0b96f245c708760edf29ec431a7c9")]
 [assembly: System.Reflection.AssemblyProductAttribute("BigDaddySanta")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BigDaddySanta")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

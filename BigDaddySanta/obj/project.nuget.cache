@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "XSIdoO7lNaQ=",
+  "dgSpecHash": "JopwUCRAUt0=",
   "success": true,
-  "projectFilePath": "/home/maccready/Documents/University/Poitiers/L2/csharp/Projet_AP2_UP_Pere_Noel/BigDaddySanta/BigDaddySanta.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/home/maccready/Documents/AP2/Projet_AP2_UP_Pere_Noel/BigDaddySanta/BigDaddySanta.csproj",
+  "expectedPackageFiles": [
+    "/home/maccready/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.11/microsoft.aspnetcore.app.ref.9.0.11.nupkg.sha512",
+    "/home/maccready/.nuget/packages/microsoft.netcore.app.host.linux-x64/9.0.11/microsoft.netcore.app.host.linux-x64.9.0.11.nupkg.sha512"
+  ],
   "logs": []
 }

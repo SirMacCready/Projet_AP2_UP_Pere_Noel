@@ -300,7 +300,7 @@ namespace BigDaddySanta
             // Vérifier les elfes et traîneaux
             foreach (Elfe elfe in Elfes)
             {
-                if (!elfe.Traineau.EnVoyage == false && elfe.Traineau.Lettres.Count > 0)
+                if (elfe.Traineau.EnVoyage == false && elfe.Traineau.Lettres.Count > 0)
                 {
                     elfe.Traineau.PartirEnVoyage();
                 }

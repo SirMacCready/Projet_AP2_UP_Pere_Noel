@@ -7,9 +7,9 @@ namespace BigDaddySanta
 
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Simulation simulation = null;
-            bool continuer = true;
+            (bool continuerSimulation, bool relancerSimulation) continuer = (true,false);
 
-            while (continuer)
+            while (continuer.continuer)
             {
                 if (simulation == null)
                 {
@@ -19,7 +19,7 @@ namespace BigDaddySanta
                 {
                     continuer = MenuPrincipal(simulation);
 
-                    if (continuer && simulation.ToutesLettresTraitees())
+                    if (continuer.continuerSimulation && !continuer.relancerSimulation && simulation.ToutesLettresTraitees())
                     {
                         Console.WriteLine("\n🎄 Toutes les lettres ont été traitées! 🎄");
                         simulation.AfficherBilan();
@@ -32,8 +32,12 @@ namespace BigDaddySanta
                         }
                         else
                         {
-                            continuer = false;
+                            continuer.continuer = false;
                         }
+                    }
+                    else if(continuer.continuerSimulation && continuer.relancerSimulation)
+                    {
+                        simulation = null;
                     }
                 }
             }
@@ -71,7 +75,7 @@ namespace BigDaddySanta
             return new Simulation(nbLutins, nbNains, nbEnfants, nbLettresParHeure, nbJouetParTraineau);
         }
 
-        static bool MenuPrincipal(Simulation simulation)
+        static (bool,bool) MenuPrincipal(Simulation simulation)
         {
             Console.Clear();
             Console.WriteLine("╔════════════════════════════════════════════════════════════╗");
@@ -98,7 +102,7 @@ namespace BigDaddySanta
                     Console.WriteLine($"\n✅ Avancé à: Jour {simulation.JourActuel}, Heure {simulation.HeureActuelle % 12 + 1}");
                     Console.WriteLine("Appuyez sur une touche pour continuer...");
                     Console.ReadKey();
-                    return true;
+                    return (true,false);
 
                 case "2":
                     int heuresAvant = simulation.HeureActuelle;
@@ -107,50 +111,50 @@ namespace BigDaddySanta
                     Console.WriteLine($"   ({simulation.HeureActuelle - heuresAvant} heures écoulées)");
                     Console.WriteLine("Appuyez sur une touche pour continuer...");
                     Console.ReadKey();
-                    return true;
+                    return (true,false);
 
                 case "3":
                     simulation.AfficherIndicateurs();
                     Console.WriteLine("Appuyez sur une touche pour continuer...");
                     Console.ReadKey();
-                    return true;
+                    return (true,false);
 
                 case "4":
                     MenuGestionLutins(simulation);
-                    return true;
+                    return (true,false);
 
                 case "5":
                     MenuGestionNains(simulation);
-                    return true;
+                    return (true,false);
 
                 case "6":
                     AfficherEntrepots(simulation);
                     Console.WriteLine("Appuyez sur une touche pour continuer...");
                     Console.ReadKey();
-                    return true;
+                    return (true,false);
 
                 case "7":
                     simulation.AfficherBilan();
                     Console.WriteLine("Appuyez sur une touche pour continuer...");
                     Console.ReadKey();
-                    return true;
+                    return (true,false);
 
                 case "8":
                     simulation.AfficherBilan();
-                    return false;
+                    return (false,false);
 
                 case "9":
                     simulation.AfficherBilan();
                     Console.WriteLine("\n🔄 Redémarrage de la simulation...");
                     Console.WriteLine("Appuyez sur une touche pour continuer...");
                     Console.ReadKey();
-                    return false;
+                    return (true,true);
 
                 default:
                     Console.WriteLine("❌ Choix invalide.");
                     Console.WriteLine("Appuyez sur une touche pour continuer...");
                     Console.ReadKey();
-                    return true;
+                    return (true,false);
             }
         }
 

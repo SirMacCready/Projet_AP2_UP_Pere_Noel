@@ -301,8 +301,10 @@ namespace BigDaddySanta
             // Vérifier les elfes et traîneaux
             foreach (Elfe elfe in Elfes)
             {
-                if (elfe.Traineau.EnVoyage || elfe.Traineau.Lettres.Count > 0)
-                    return false;
+                if (!elfe.Traineau.EnVoyage == false && elfe.Traineau.Lettres > 0){
+                    elfe.Traineau.PartirEnVoyage();
+                else 
+                    return false
             }
 
             return true;
@@ -322,7 +324,8 @@ namespace BigDaddySanta
 public void ModifierNombreLutins(int nouveauNombre)
 {
     if (nouveauNombre < 0 || nouveauNombre > NbLutins)
-        throw new ArgumentException("Nombre de lutins invalide.");
+        Console.WriteLine("Nombre de lutins invalide.");
+        return;
 
     if (HeureActuelle - DerniereModificationLutins < 12)
     {
@@ -373,7 +376,8 @@ public void ModifierNombreLutins(int nouveauNombre)
 public void ModifierNombreNains(int nouveauNombre)
 {
     if (nouveauNombre < 0 || nouveauNombre > NbNains)
-        throw new ArgumentException("Nombre de nains invalide.");
+        Console.WriteLine("Nombre de Nains invalide.");
+        return;
 
     if (HeureActuelle - DerniereModificationNains < 24)
     {

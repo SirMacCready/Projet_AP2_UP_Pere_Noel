@@ -1,4 +1,4 @@
-﻿namespace BigDaddySanta
+namespace BigDaddySanta
 {
     class Program
     {

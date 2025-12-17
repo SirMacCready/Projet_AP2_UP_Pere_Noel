@@ -5,7 +5,7 @@ namespace BigDaddySanta
     public enum Continent
     {
         Europe,
-        Asie ,
+        Asie,
         Afrique,
         Amerique,
         Oceanie
@@ -124,25 +124,25 @@ namespace BigDaddySanta
         }
 
         private void GenererLettres()
-{
+        {
 
-    List<Lettre> toutesLesLettres = new List<Lettre>();
+            List<Lettre> toutesLesLettres = new List<Lettre>();
 
-    for (int i = 0; i < NbEnfants; i++)
-    {
-        string nom = DonneesSimulation.prenoms[random.Next(DonneesSimulation.prenoms.Length)];
-        string adresse = DonneesSimulation.adresses[random.Next(DonneesSimulation.adresses.Length)];
-        int age = random.Next(0, 19);
+            for (int i = 0; i < NbEnfants; i++)
+            {
+                string nom = DonneesSimulation.prenoms[random.Next(DonneesSimulation.prenoms.Length)];
+                string adresse = DonneesSimulation.adresses[random.Next(DonneesSimulation.adresses.Length)];
+                int age = random.Next(0, 19);
 
-        // Ici, on ajoute un identifiant unique (i+1) à la lettre
-        toutesLesLettres.Add(new Lettre(nom, adresse, age, i + 1));
-    }
+                // Ici, on ajoute un identifiant unique (i+1) à la lettre
+                toutesLesLettres.Add(new Lettre(nom, adresse, age, i + 1));
+            }
 
-    foreach (Lettre lettre in toutesLesLettres)
-    {
-        BureauPereNoel.Push(lettre);
-    }
-}
+            foreach (Lettre lettre in toutesLesLettres)
+            {
+                BureauPereNoel.Push(lettre);
+            }
+        }
         public void AvancerUneHeure()
         {
             // JE FAIS UN EFFORT POUR COMMENTER CHAQUE ÉTAPE CLAIREMENT CLOE !
@@ -294,17 +294,17 @@ namespace BigDaddySanta
             // Vérifier les files d'attente des continents
             foreach (Queue<Lettre> file in FilesAttenteContinents)
             {
-                if (file.Count > 0)
-                    return false;
+                if (file.Count > 0) return false;
             }
 
             // Vérifier les elfes et traîneaux
             foreach (Elfe elfe in Elfes)
             {
-                if (!elfe.Traineau.EnVoyage == false && elfe.Traineau.Lettres > 0){
+                if (!elfe.Traineau.EnVoyage == false && elfe.Traineau.Lettres.Count > 0)
+                {
                     elfe.Traineau.PartirEnVoyage();
-                else 
-                    return false
+                }
+                else return false;
             }
 
             return true;
@@ -321,109 +321,111 @@ namespace BigDaddySanta
                 heuresPassees++;
             }
         }
-public void ModifierNombreLutins(int nouveauNombre)
-{
-    if (nouveauNombre < 0 || nouveauNombre > NbLutins)
-        Console.WriteLine("Nombre de lutins invalide.");
-        return;
-
-    if (HeureActuelle - DerniereModificationLutins < 12)
-    {
-        Console.WriteLine("Modification impossible avant 12 heures.");
-        return;
-    }
-
-    // Calcul du nombre de lutins actifs (pas en repos)
-    int actifs = 0;
-    foreach (Lutin l in Lutins)
-    {
-        if (l.Statut != StatutEmploye.EnRepos)
-            actifs++;
-    }
-
-    if (nouveauNombre > actifs)
-    {
-        int aActiver = nouveauNombre - actifs;
-        foreach (Lutin l in Lutins)
+        public void ModifierNombreLutins(int nouveauNombre)
         {
-            if (aActiver <= 0)
-                break;
-            if (l.Statut == StatutEmploye.EnRepos)
+            if (nouveauNombre < 0 || nouveauNombre > NbLutins)
             {
-                l.Statut = StatutEmploye.EnAttente;
-                aActiver--;
+                Console.WriteLine("Nombre de lutins invalide.");
+                return;
             }
+            if (HeureActuelle - DerniereModificationLutins < 12)
+            {
+                Console.WriteLine("Modification impossible avant 12 heures.");
+                return;
+            }
+
+            // Calcul du nombre de lutins actifs (pas en repos)
+            int actifs = 0;
+            foreach (Lutin l in Lutins)
+            {
+                if (l.Statut != StatutEmploye.EnRepos)
+                    actifs++;
+            }
+
+            if (nouveauNombre > actifs)
+            {
+                int aActiver = nouveauNombre - actifs;
+                foreach (Lutin l in Lutins)
+                {
+                    if (aActiver <= 0)
+                        break;
+                    if (l.Statut == StatutEmploye.EnRepos)
+                    {
+                        l.Statut = StatutEmploye.EnAttente;
+                        aActiver--;
+                    }
+                }
+            }
+            else if (nouveauNombre < actifs)
+            {
+                int aMettreRepos = actifs - nouveauNombre;
+                foreach (Lutin l in Lutins)
+                {
+                    if (aMettreRepos <= 0)
+                        break;
+                    if (l.Statut != StatutEmploye.EnRepos)
+                    {
+                        l.Statut = StatutEmploye.EnRepos;
+                        aMettreRepos--;
+                    }
+                }
+            }
+
+            DerniereModificationLutins = HeureActuelle;
         }
-    }
-    else if (nouveauNombre < actifs)
-    {
-        int aMettreRepos = actifs - nouveauNombre;
-        foreach (Lutin l in Lutins)
+
+        public void ModifierNombreNains(int nouveauNombre)
         {
-            if (aMettreRepos <= 0)
-                break;
-            if (l.Statut != StatutEmploye.EnRepos)
+            if (nouveauNombre < 0 || nouveauNombre > NbNains)
             {
-                l.Statut = StatutEmploye.EnRepos;
-                aMettreRepos--;
+                Console.WriteLine("Nombre de Nains invalide.");
+                return;
             }
-        }
-    }
-
-    DerniereModificationLutins = HeureActuelle;
-}
-
-public void ModifierNombreNains(int nouveauNombre)
-{
-    if (nouveauNombre < 0 || nouveauNombre > NbNains)
-        Console.WriteLine("Nombre de Nains invalide.");
-        return;
-
-    if (HeureActuelle - DerniereModificationNains < 24)
-    {
-        Console.WriteLine("Modification impossible avant 24 heures.");
-        return;
-    }
-
-    // Calcul du nombre de nains actifs (pas en repos)
-    int actifs = 0;
-    foreach (Nain n in Nains)
-    {
-        if (n.Statut != StatutEmploye.EnRepos)
-            actifs++;
-    }
-
-    if (nouveauNombre > actifs)
-    {
-        int aActiver = nouveauNombre - actifs;
-        foreach (Nain n in Nains)
-        {
-            if (aActiver <= 0)
-                break;
-            if (n.Statut == StatutEmploye.EnRepos)
+            if (HeureActuelle - DerniereModificationNains < 24)
             {
-                n.Statut = StatutEmploye.EnAttente;
-                aActiver--;
+                Console.WriteLine("Modification impossible avant 24 heures.");
+                return;
             }
-        }
-    }
-    else if (nouveauNombre < actifs)
-    {
-        int aMettreRepos = actifs - nouveauNombre;
-        foreach (Nain n in Nains)
-        {
-            if (aMettreRepos <= 0)
-                break;
-            if (n.Statut != StatutEmploye.EnRepos)
-            {
-                n.Statut = StatutEmploye.EnRepos;
-                aMettreRepos--;
-            }
-        }
-    }
 
-    DerniereModificationNains = HeureActuelle;
-}
+            // Calcul du nombre de nains actifs (pas en repos)
+            int actifs = 0;
+            foreach (Nain n in Nains)
+            {
+                if (n.Statut != StatutEmploye.EnRepos)
+                    actifs++;
+            }
+
+            if (nouveauNombre > actifs)
+            {
+                int aActiver = nouveauNombre - actifs;
+                foreach (Nain n in Nains)
+                {
+                    if (aActiver <= 0)
+                        break;
+                    if (n.Statut == StatutEmploye.EnRepos)
+                    {
+                        n.Statut = StatutEmploye.EnAttente;
+                        aActiver--;
+                    }
+                }
+            }
+            else if (nouveauNombre < actifs)
+            {
+                int aMettreRepos = actifs - nouveauNombre;
+                foreach (Nain n in Nains)
+                {
+                    if (aMettreRepos <= 0)
+                        break;
+                    if (n.Statut != StatutEmploye.EnRepos)
+                    {
+                        n.Statut = StatutEmploye.EnRepos;
+                        aMettreRepos--;
+                    }
+                }
+            }
+
+            DerniereModificationNains = HeureActuelle;
+        }
 
         public void AfficherIndicateurs()
         {
@@ -452,14 +454,14 @@ public void ModifierNombreNains(int nouveauNombre)
             Console.WriteLine($"║   • Cadeaux en fabrication: {lutinsEnTravail}");
             Console.WriteLine($"║   • Lettres en attente: {FileAttenteFabrication.Count}");
             Console.WriteLine("║ LETTRES EN FABRICATION (lutins) :");
-        foreach (var lutin in Lutins)
-        {
-            if (lutin.Statut == StatutEmploye.EnTravail && lutin.LettreEnCours != null)
+            foreach (var lutin in Lutins)
             {
-                var lettre = lutin.LettreEnCours;
-                Console.WriteLine($"║   • Lutin {lutin.Id} : {lettre.Prenom}, {lettre.Adresse}, Age {lettre.Age}");
+                if (lutin.Statut == StatutEmploye.EnTravail && lutin.LettreEnCours != null)
+                {
+                    var lettre = lutin.LettreEnCours;
+                    Console.WriteLine($"║   • Lutin {lutin.Id} : {lettre.Prenom}, {lettre.Adresse}, Age {lettre.Age}");
+                }
             }
-        }
             // Nains - compter manuellement
             int nainsEnTravail = 0;
             int nainsEnAttente = 0;

@@ -1,0 +1,15 @@
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/LaFabriqueDuPereNoel.GeneratedMSBuildEditorConfig.editorconfig
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/LaFabriqueDuPereNoel.AssemblyInfoInputs.cache
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/LaFabriqueDuPereNoel.AssemblyInfo.cs
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/LaFabriqueDuPereNoel.csproj.CoreCompileInputs.cache
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/LaFabriqueDuPereNoel.sourcelink.json
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/bin/Debug/net9.0/LaFabriqueDuPereNoel
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/bin/Debug/net9.0/LaFabriqueDuPereNoel.deps.json
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/bin/Debug/net9.0/LaFabriqueDuPereNoel.runtimeconfig.json
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/bin/Debug/net9.0/LaFabriqueDuPereNoel.dll
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/bin/Debug/net9.0/LaFabriqueDuPereNoel.pdb
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/LaFabriqueDuPereNoel.dll
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/refint/LaFabriqueDuPereNoel.dll
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/LaFabriqueDuPereNoel.pdb
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/LaFabriqueDuPereNoel.genruntimeconfig.cache
+/home/maccready/Projet_AP2_UP_Pere_Noel/LaFabriqueDuPereNoel/obj/Debug/net9.0/ref/LaFabriqueDuPereNoel.dll
